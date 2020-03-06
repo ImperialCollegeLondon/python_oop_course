@@ -42,6 +42,11 @@ keypoints:
 >
 {: .callout}
 
+## Encapsulation: classes
+
+- Is one of the basic principles of OOP by which an *entity* bundles together properties (or *attributes* as they are called in Python) and behaviours (*methods*) related to the properties that execute actions.
+- This entity is called a *class*.
+- Encapsulation enables a class to present an interface on how an object belonging to that class (see below) can be acted upon, hiding from the outside world any implementation details and other properties that need not to be known outside that class.
 
 {% include links.md %}
 
