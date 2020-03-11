@@ -55,7 +55,7 @@ class MyClass:
     pass    # <- `pass` just indicates python to do nothing
 ```
 
-- This code creates a class, but to use it, you must create an instance of the class:
+- This code creates a class, but to use it, you must create an *instance* of the class, which is also called an *object*:
 
 ```python
 a = MyClass()
@@ -78,14 +78,14 @@ Are 'a' and 'b' equal? False
 > ## Built-in classes (or types)
 > Python built-in types like `list`, `tuple`, `dict`, `str` and all the numeric types are
 > classes, and the variables that use them are instances of those classes. To what classes
-> belong the following variables?
+> do the following variables belong?
 >
 > ```python
 > a = [1, 2, 3]
 > b = (1, 2, 3)
 > c = {1, 2, 3}
 > d = 42
-> e = {"name": "Fluffy", "species": "Cat"}
+> e = {"name": "Fluffy", "species": "Three-Headed Dog"}
 > f = True
 > g = "My taylor is rich!"
 > ```
@@ -104,9 +104,9 @@ Are 'a' and 'b' equal? False
 ## Methods
 
 - The above example class has no attributes nor methods, which is pretty useless.
-- When creating a class, you must define also its attributes and methods, so the rest of the code can interact with it.
-- Methods are the behaviors of the class, the functions or actions that can be used to interact with the class.
-- They are defined like any other function in Python, using the `def` keyword, but with a first input parameter that has a special meaning.
+- When creating a class, you must also define its attributes and methods, so the rest of the code can interact with it.
+- Methods define the behavior of the class: the functions (or actions) that can be used to interact with the class.
+- They are defined like any other function in Python, using the `def` keyword, but the first input parameter that has a special meaning.
 
 ```python
 class MySecondClass:
@@ -116,9 +116,9 @@ class MySecondClass:
         print(f"Hello {name}! This instance is {self}")
 ```
 
-- Here, `MySecondClass` has a method, `say_hello` with two input parameters:
-    - The first one, usually called `self` refers to the specific instance of this class being used. It is compulsory: all methods within a class must take this parameter as first argument.
-    - The second argument is just a parameter used within the method.
+- Here, `MySecondClass` has a method, `say_hello`, with two input parameters:
+    - The first one, usually called `self` refers to the specific instance of the class being used. It is compulsory: **all methods within a class must take `self` as its first argument.**
+    - The second argument is just a parameter used within the method, like in any regular Python function.
 - As with any function in Python, methods can have any number of positional and keyword arguments, as well as returning values using the keyword `return`.
 - To call a method of a class, use the dot notation `.` to separate the name of the object and the method being invoked.
 - The value for the first argument, `self`, is assigned automatically to the instance being used and **must not be provided**:
@@ -140,16 +140,16 @@ Hello Diego! This instance is <__main__.MySecondClass object at 0x10ef01be0>
 
 ## Attributes
 
-- They are the properties of the class, the variables that can be read and modified (usually).
+- Attributes are the properties of a class, the variables that can be read and modified (usually).
 - There are two types of attributes: **class attributes** and **instance attributes**.
 
 ### Class attributes
 
-- They are linked to the class itself and all instance objects of the class will share the same values... at least initially:
+- Are linked to the class itself and all instance objects of the class will share the same values... at least initially:
     - If a class attribute is `mutable` (eg. a `list`) and changed its value in one instance, it will change its value in all instances.
     - If it is `immutable` (eg. a number), it will only change in that instance.
 - They are defined just after the class definition.
-- Access to attributes (both class and instance attributes) use the same dot notation than methods, but without parenthesis.
+- Access to attributes (both class and instance attributes) use the same dot notation `.` as methods, but without parenthesis.
 - Class attributes need to have some initial value.
 
 ```python
@@ -178,17 +178,17 @@ Now, a.shape = circle and b.shape = square.
 ```
 {: .output}
 
-- As it can be seen, the class attribute `colours` has changed in `b` after changing its value in `a`.
-- However, changing the `shape` in `a` does not affect the value of `shape` in `b` (Note: Indeed, a new instance attribute has been created in `a` called `shape` shadowing the value of the homonymous class attribute.)
+- As you can see, the class attribute `colours` has changed in `b` after changing its value in `a`.
+- However, changing the value of `shape` in `a` does not affect the value of `shape` in `b` (Note: Indeed, a new instance attribute has been created in `a` called `shape` overriding the value of the class attribute of the same name.)
 
 ### Instance attributes
 
-- They are properties specific of the instance.
+- They are properties specific to the instance.
 - Each instance has its own copy and changing the value in one instance does not affect the value of that property in the other instances.
-- They are defined within an special `__init__` method, called constructor.
-- The `__init__` method is the one called when creating an instance of a class.
-- As with any other method, the first argument is `self` and can have any number of positional and keyword arguments.
-- To create the instance attributes, the dot notation is used, using `self` as the instance object.
+- They are defined within a special `__init__` method, called a constructor.
+- The `__init__` method is automatically called when creating an instance of a class.
+- As with any other method, the first argument is `self` and it can have any number of positional and keyword arguments.
+- To create instance attributes, dot notation `.` is used with `self` as the instance object.
 
 ```python
 class Computers:
@@ -215,7 +215,7 @@ Apple models are: ['iMac', 'MacBook Pro'] while Microsoft's are ['Surface Pro', 
 >
 > Contrary to other languages, in Python there are not really `public` and `private`
 > members (attributes and methods), however, by convention all attributes and methods
-> starting by a single underscore `_` are considered private, only to be used within the class.
+> starting with a single underscore `_` are considered private, only to be used within the class.
 {: .callout}
 
 > ## The Cup of Tea class
@@ -262,7 +262,7 @@ Apple models are: ['iMac', 'MacBook Pro'] while Microsoft's are ['Surface Pro', 
 ## Special methods and attributes
 
 - Special methods and attributes are enclosed between a double underscore `__`.
-- They are not meant to be called directly by the user, but rather are used by Python when something is required from a class or their instances.
+- They are not meant to be called directly by the user, but rather are used by Python when something is required from a class or an instance of a class.
 - Some common methods and attributes present in most classes are:
     - `__init__` is the method called when creating a new instance of a class.
     - `__repr__` is a method called when we require to have a representation of the object, for example when printing the object with `print(microsoft)`.
@@ -277,7 +277,7 @@ Apple models are: ['iMac', 'MacBook Pro'] while Microsoft's are ['Surface Pro', 
 {: .challenge}
 
 > ## Improving the representation of our classes
-> In the last CupOfTea example, it will be nicer that if we could get the status just by
+> In the last CupOfTea example, it will be nicer if we could get the status just by
 > calling `print(cup_of_tea_object)` rather than `cup_of_tea_object.status()`
 >
 > Replace the `status` method by a custom `__repr__` method for the class `CupOfTea` that
