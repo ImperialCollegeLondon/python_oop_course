@@ -44,6 +44,8 @@ keypoints:
 - Encapsulation is one of the basic principles of OOP by which an *entity* bundles together properties (or *attributes* as they are called in Python) and behaviors (*methods*) related to the properties that execute actions.
 - This entity is called a *class*.
 - Encapsulation enables a class to present an interface on how an object belonging to that class (see below) can be acted upon, hiding from the outside world any implementation details and other properties that need not to be known outside that class.
+- All variables and functions defined within a class that are not attributes or methods are not accessible outside of the class.
+- Attributes and methods can be accessed externally by using the dot notation, eg. `object_name.my_attribute` or `object_name.my_method`.
 
 ## Classes and instances
 
@@ -142,44 +144,8 @@ Hello Diego! This instance is <__main__.MySecondClass object at 0x10ef01be0>
 
 - Attributes are the properties of a class, the variables that can be read and modified (usually).
 - There are two types of attributes: **class attributes** and **instance attributes**.
+- **class attributes** are linked to the class itself and all instance objects of the class will share the same values. They are somewhat useful, but can also lead to errors (see callout at the end of this episode)
 
-### Class attributes
-
-- Are linked to the class itself and all instance objects of the class will share the same values... at least initially:
-    - If a class attribute is `mutable` (eg. a `list`) and changed its value in one instance, it will change its value in all instances.
-    - If it is `immutable` (eg. a number), it will only change in that instance.
-- They are defined just after the class definition.
-- Access to attributes (both class and instance attributes) use the same dot notation `.` as methods, but without parenthesis.
-- Class attributes need to have some initial value.
-
-```python
-class ShapesAndColours:
-    """ A simple class explaining class attributes. """
-    colours = []        # <- mutable
-    shape = "square"    # <- immutable
-
-a = ShapesAndColours()
-b = ShapesAndColours()
-
-print(f"Before, a.colours = {a.colours} and b.colours = {b.colours}.")
-print(f"Before, a.shape = {a.shape} and b.shape = {b.shape}.")
-
-a.colours.append("blue")
-a.shape = "circle"
-
-print(f"Now, a.colours = {a.colours} and b.colours = {b.colours}.")
-print(f"Now, a.shape = {a.shape} and b.shape = {b.shape}.")
-```
-```
-Before, a.colours = [] and b.colours = [].
-Before, a.shape = square and b.shape = square.
-Now, a.colours = ['blue'] and b.colours = ['blue'].
-Now, a.shape = circle and b.shape = square.
-```
-{: .output}
-
-- As you can see, the class attribute `colours` has changed in `b` after changing its value in `a`.
-- However, changing the value of `shape` in `a` does not affect the value of `shape` in `b` (Note: Indeed, a new instance attribute has been created in `a` called `shape` overriding the value of the class attribute of the same name.)
 
 ### Instance attributes
 
@@ -211,20 +177,44 @@ Apple models are: ['iMac', 'MacBook Pro'] while Microsoft's are ['Surface Pro', 
 ```
 {: .output}
 
-> ## Restricted attributes
->
-> Contrary to other languages, in Python there are not really `public` and `private`
-> members (attributes and methods), however, by convention all attributes and methods
-> starting with a single underscore `_` are considered private, only to be used within the class.
-{: .callout}
+## Restricted members
+
+- Contrary to other languages, in Python there are not really `public` and `private`members (attributes and methods).
+- However, by convention, all attributes and methods starting by a single underscore `_` are considered private, only to be used within the class.
+- **Restricted attributes** are useful to keep track of the internal state of the instance, as internal variables, etc. They do not contain information immediately useful outside of the class.
+- Likewise, **restricted methods** are meant to be called internally within the class, maybe used to run some intermediate calculations, and do not form part of the public interface of the class.
+
+```python
+class HotOrCold:
+
+    def __init__(threshold):
+        self.threshold = threshold
+        self.is_hot = False
+        self._temperature = 20
+        self._update_status()
+
+    def warm(self, time):
+        self._temperature += 50 * time
+        self._update_status()
+
+    def cool(self, time):
+        self._temperature = max(-273, self._temperature - 50 * time)
+        self._update_status()
+
+    def _update_status(self):
+        self.is_hot = self._temperature > self.threshold
+```
+
+- In this `HotOrCold` class, `_temperature` is a restricted attribute and `_update_status` is a restricted method.
+- The user is not expected to set the temperature manually, but just to modify it by calling `warm` and `cool`, as well as qualitatively finding if it is hot or not by checking the value of `is_hot`.
 
 > ## The Cup of Tea class
 >
 > Create a class called `CupOfTea` that implements the attributes and methods described
 > in the first example of the episode. The creation of the instances should take only the
 > kind of tea as input, and the cups should be initially full and cold. Additionally, it
-> should have a method called `status` that will print all the information related to the
-> current status of the cup of tea.
+> should have a method called `status` that will print - in english! - a message with the
+> information related to the current status of the cup of tea.
 >
 > > ## Solution
 > >
@@ -262,7 +252,7 @@ Apple models are: ['iMac', 'MacBook Pro'] while Microsoft's are ['Surface Pro', 
 ## Special methods and attributes
 
 - Special methods and attributes are enclosed between a double underscore `__`.
-- They are not meant to be called directly by the user, but rather are used by Python when something is required from a class or an instance of a class.
+- They are not meant to be called directly by the user (neither interally or externally), but rather are used by Python when something is required from a class or an instance of a class.
 - Some common methods and attributes present in most classes are:
     - `__init__` is the method called when creating a new instance of a class.
     - `__repr__` is a method called when we require to have a representation of the object, for example when printing the object with `print(microsoft)`.
@@ -301,6 +291,45 @@ Apple models are: ['iMac', 'MacBook Pro'] while Microsoft's are ['Surface Pro', 
 > {: .solution}
 {: .challenge}
 
+> ## Class attributes
+>
+> - They are linked to the class itself and all instance objects of the class will share the same values... at least initially:
+>     - If a class attribute is `mutable` (eg. a `list`) and changed its value in one instance, it will change its value in all instances.
+>     - If it is `immutable` (eg. a number), it will only change in that instance.
+> - They are defined just after the class definition.
+> - Access to attributes (both class and instance attributes) use the same dot notation than methods, but without parenthesis.
+> - Class attributes need to have some initial value.
+>
+> ```python
+> class ShapesAndColours:
+>     """ A simple class explaining class attributes. """
+>     colours = []        # <- mutable
+>     shape = "square"    # <- immutable
+>
+> a = ShapesAndColours()
+> b = ShapesAndColours()
+>
+> print(f"Before, a.colours = {a.colours} and b.colours = {b.colours}.")
+> print(f"Before, a.shape = {a.shape} and b.shape = {b.shape}.")
+>
+> a.colours.append("blue")
+> a.shape = "circle"
+>
+> print(f"Now, a.colours = {a.colours} and b.colours = {b.colours}.")
+> print(f"Now, a.shape = {a.shape} and b.shape = {b.shape}.")
+> ```
+> ```
+> Before, a.colours = [] and b.colours = [].
+> Before, a.shape = square and b.shape = square.
+> Now, a.colours = ['blue'] and b.colours = ['blue'].
+> Now, a.shape = circle and b.shape = square.
+> ```
+> {: .output}
+>
+> - As it can be seen, the class attribute `colours` has changed in `b` after changing its value in `a`.
+> - However, changing the `shape` in `a` does not affect the value of `shape` in `b` (Note: Indeed, a new instance attribute has been created in `a` called `shape` shadowing the value of the homonymous class attribute.)
+>
+{: .callout}
 
 {% include links.md %}
 
