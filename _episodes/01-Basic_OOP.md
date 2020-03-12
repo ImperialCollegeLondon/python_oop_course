@@ -151,6 +151,7 @@ Hello Diego! This instance is <__main__.MySecondClass object at 0x10ef01be0>
 
 - They are properties specific to the instance.
 - Each instance has its own copy and changing the value in one instance does not affect the value of that property in the other instances.
+- Access attributes (both class and instance attributes) using the same dot notation as for methods, but without parenthesis.
 - They are defined within a special `__init__` method, called a constructor.
 - The `__init__` method is automatically called when creating an instance of a class.
 - As with any other method, the first argument is `self` and it can have any number of positional and keyword arguments.
@@ -293,11 +294,11 @@ class HotOrCold:
 
 > ## Class attributes
 >
-> - They are linked to the class itself and all instance objects of the class will share the same values... at least initially:
+> - Are linked to the class itself and all instance objects of the class will share the same values... at least initially:
 >     - If a class attribute is `mutable` (eg. a `list`) and changed its value in one instance, it will change its value in all instances.
 >     - If it is `immutable` (eg. a number), it will only change in that instance.
 > - They are defined just after the class definition.
-> - Access to attributes (both class and instance attributes) use the same dot notation than methods, but without parenthesis.
+> - Access attributes (both class and instance attributes) using the same dot notation as for methods, but without parenthesis.
 > - Class attributes need to have some initial value.
 >
 > ```python
@@ -326,8 +327,8 @@ class HotOrCold:
 > ```
 > {: .output}
 >
-> - As it can be seen, the class attribute `colours` has changed in `b` after changing its value in `a`.
-> - However, changing the `shape` in `a` does not affect the value of `shape` in `b` (Note: Indeed, a new instance attribute has been created in `a` called `shape` shadowing the value of the homonymous class attribute.)
+> - As you can see, the class attribute `colours` has changed in `b` after changing its value in `a`.
+> - However, changing the value of`shape` in `a` does not affect the value of `shape` in `b` (Note: Indeed, a new instance attribute has been created in `a` called `shape` shadowing the value of the class attribute of the same name.)
 >
 {: .callout}
 
